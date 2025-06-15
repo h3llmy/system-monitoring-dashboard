@@ -1,6 +1,6 @@
-import { ChartCard } from '../../card';
-import { useMonitoringChartSse } from '../hook';
-import { CpuChart, DiskChart, MemoryChart, NetworkChart } from '../organisms';
+import { ChartCard } from "../../card";
+import { useMonitoringChartSse } from "../hook";
+import { CpuChart, DiskChart, MemoryChart, NetworkChart } from "../organisms";
 import {
   ArcElement,
   CategoryScale,
@@ -11,8 +11,8 @@ import {
   LineElement,
   PointElement,
   Title,
-  Tooltip
-} from 'chart.js';
+  Tooltip,
+} from "chart.js";
 
 ChartJS.register(
   ArcElement,
@@ -44,7 +44,7 @@ export const MetRicsChartTemplate = () => {
           <NetworkChart chartData={chartData} />
         </ChartCard>
 
-        {chartData[chartData.length - 1]?.disk.map((disk, index) => (
+        {chartData[chartData.length - 1]?.disk?.map((disk, index) => (
           <ChartCard key={index}>
             <DiskChart chartData={disk} />
           </ChartCard>

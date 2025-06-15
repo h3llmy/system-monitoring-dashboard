@@ -17,6 +17,10 @@ export interface DiskMetrics {
   type: string;
   used: number;
   total: number;
+  readBytes: number;
+  writeBytes: number;
+  readBps: number;
+  writeBps: number;
 }
 
 export interface NetworkMetrics {
