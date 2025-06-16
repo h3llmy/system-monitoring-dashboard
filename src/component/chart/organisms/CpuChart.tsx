@@ -8,7 +8,12 @@ export interface CpuChartProps {
 }
 
 export const CpuChart: FC<CpuChartProps> = ({ chartData }) => {
-  const options = useLineChartOptions();
+  const maxCpu = useMemo(() => {
+    const values = chartData.map((d) => d.cpu);
+    return Math.max(100, ...values); // Ensure a minimum upper bound
+  }, [chartData]);
+
+  const options = useLineChartOptions({ maxY: maxCpu });
 
   const data = useMemo(
     () => ({
