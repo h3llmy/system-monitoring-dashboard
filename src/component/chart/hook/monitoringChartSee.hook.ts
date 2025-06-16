@@ -1,23 +1,29 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { SystemMetrics } from "../interface";
 
 export const useMonitoringChartSse = () => {
   const [chartData, setChartData] = useState<SystemMetrics[] | []>([]);
+  const retryTimeoutRef = useRef<number | null>(null);
+  const controllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
-    const controller = new AbortController();
+    let isUnmounted = false;
 
     const connect = async () => {
+      if (isUnmounted) return;
+
+      controllerRef.current = new AbortController();
+
       try {
         const response = await fetch(
           "http://localhost:3000/api/v1/monitoring",
           {
             method: "GET",
             headers: {
-              "X-API-Key": "jhrti534qtodhjsofhkl2904b123", // ← Add your key here
+              "X-API-Key": "jhrti534qtodhjsofhkl2904b123",
               Accept: "text/event-stream",
             },
-            signal: controller.signal,
+            signal: controllerRef.current.signal,
           }
         );
 
@@ -27,16 +33,13 @@ export const useMonitoringChartSse = () => {
         const decoder = new TextDecoder("utf-8");
         let buffer = "";
 
-        while (true) {
+        while (!isUnmounted) {
           const { value, done } = await reader.read();
-          if (done) break;
+          if (done) throw new Error("Stream closed");
 
           buffer += decoder.decode(value, { stream: true });
 
-          // Split on *double newline*, which separates events
           const events = buffer.split("\n\n");
-
-          // Keep the last part (possibly incomplete) in the buffer
           buffer = events.pop() || "";
 
           for (const eventText of events) {
@@ -56,14 +59,22 @@ export const useMonitoringChartSse = () => {
           }
         }
       } catch (error) {
-        if (controller.signal.aborted) return;
-        console.error("SSE connection failed:", error);
+        if (isUnmounted || controllerRef.current?.signal.aborted) return;
+
+        console.error("SSE connection failed. Reconnecting in 3s...", error);
+
+        // Retry in 3 seconds
+        retryTimeoutRef.current = setTimeout(connect, 3000);
       }
     };
 
     connect();
 
-    return () => controller.abort(); // Cleanup on unmount
+    return () => {
+      isUnmounted = true;
+      controllerRef.current?.abort();
+      if (retryTimeoutRef.current) clearTimeout(retryTimeoutRef.current);
+    };
   }, []);
 
   return [chartData] as const;
