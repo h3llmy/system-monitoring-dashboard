@@ -2,7 +2,9 @@ import { useEffect, useRef, useState } from "react";
 import { SystemMetrics } from "../interface";
 
 export const useMonitoringChartSse = () => {
-  const [chartData, setChartData] = useState<SystemMetrics[] | []>([]);
+  const [chartData, setChartData] = useState<SystemMetrics>(
+    {} as SystemMetrics
+  );
   const retryTimeoutRef = useRef<number | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
 
@@ -49,7 +51,7 @@ export const useMonitoringChartSse = () => {
               if (line.startsWith("data:")) {
                 const jsonStr = line.replace(/^data:\s*/, "");
                 try {
-                  const parsed: SystemMetrics[] = JSON.parse(jsonStr);
+                  const parsed: SystemMetrics = JSON.parse(jsonStr);
                   setChartData(parsed);
                 } catch (err) {
                   console.error("Failed to parse SSE data:", err);

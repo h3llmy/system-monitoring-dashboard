@@ -5,7 +5,7 @@ import { SystemMetrics } from "../interface";
 import { useDarkMode } from "../../../utils/hooks";
 
 export interface CpuChartProps {
-  chartData: SystemMetrics[];
+  chartData: SystemMetrics;
 }
 
 export const CpuChart: FC<CpuChartProps> = ({ chartData }) => {
@@ -26,10 +26,12 @@ export const CpuChart: FC<CpuChartProps> = ({ chartData }) => {
   }
   const data = useMemo(
     () => ({
-      labels: chartData.map(() => ""),
+      labels: chartData?.matrics?.map(() => ""),
       datasets: [
         {
-          label: `CPU Usage ${chartData[chartData.length - 1]?.cpu || 0}%`,
+          label: `CPU Usage ${
+            chartData?.matrics?.[chartData?.matrics?.length - 1]?.cpu || 0
+          }%`,
           backgroundColor: "rgba(0, 123, 255, 0.2)",
           borderColor: "rgba(0, 123, 255, 1)",
           borderWidth: 2,
@@ -37,7 +39,7 @@ export const CpuChart: FC<CpuChartProps> = ({ chartData }) => {
           pointHoverRadius: 0,
           tension: 0.3,
           fill: "start",
-          data: chartData.map((d) => d.cpu),
+          data: chartData?.matrics?.map((d) => d?.cpu),
         },
       ],
     }),

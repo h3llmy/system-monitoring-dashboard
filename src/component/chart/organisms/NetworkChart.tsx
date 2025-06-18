@@ -5,7 +5,7 @@ import { useLineChartOptions } from "../hook";
 import { useDarkMode } from "../../../utils/hooks";
 
 export interface NetworkChartProps {
-  chartData: SystemMetrics[];
+  chartData: SystemMetrics;
 }
 
 export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
@@ -22,14 +22,18 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
   if (options?.scales?.y) options.scales.y.suggestedMax = 50;
 
   const latestUploadSpeed =
-    chartData.length > 0 ? chartData[chartData.length - 1]?.network?.up : 0;
+    chartData?.matrics?.length > 0
+      ? chartData?.matrics?.[chartData?.matrics?.length - 1]?.network?.up
+      : 0;
 
   const latestDownloadSpeed =
-    chartData.length > 0 ? chartData[chartData.length - 1]?.network?.down : 0;
+    chartData?.matrics?.length > 0
+      ? chartData?.matrics?.[chartData.matrics.length - 1]?.network?.down
+      : 0;
 
   const data = useMemo(
     () => ({
-      labels: chartData?.map(() => ""),
+      labels: chartData.matrics?.map(() => ""),
       datasets: [
         {
           label: `Upload (${latestUploadSpeed} Mbps)`,
@@ -40,7 +44,7 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
           pointHoverRadius: 5,
           tension: 0.4,
           fill: true,
-          data: chartData?.map((d) => d?.network?.up),
+          data: chartData?.matrics?.map((d) => d?.network?.up),
         },
         {
           label: `Download (${latestDownloadSpeed} Mbps)`,
@@ -51,7 +55,7 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
           pointHoverRadius: 5,
           tension: 0.4,
           fill: true,
-          data: chartData?.map((d) => d?.network?.down),
+          data: chartData?.matrics?.map((d) => d?.network?.down),
         },
       ],
     }),

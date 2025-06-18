@@ -44,7 +44,7 @@ export const MetRicsChartTemplate = () => {
           <NetworkChart chartData={chartData} />
         </ChartCard>
 
-        {chartData[chartData.length - 1]?.disk?.map((disk, index) => (
+        {chartData?.disk?.map((disk, index) => (
           <ChartCard key={index}>
             <DiskChart chartData={disk} />
           </ChartCard>

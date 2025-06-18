@@ -19,11 +19,14 @@ export const Navbar = () => {
             {isDarkMode ? (
               // Sun icon (visible in dark, click to go light)
               <svg
-                className="h-6 w-6 text-yellow-400"
-                fill="currentColor"
+                className="h-6 w-6 text-gray-800"
                 viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
               >
-                <path d="M12 3v2m0 14v2m8.66-10h2M3.34 12H1.34m15.36 6.36l1.41 1.41M6.34 6.34L4.93 4.93m12.73 0l1.41 1.41M6.34 17.66l-1.41 1.41M12 7a5 5 0 100 10 5 5 0 000-10z" />
+                <g clip-path="url(#a)" fill="#000000">
+                  <path d="M12 0a1 1 0 0 1 1 1v4a1 1 0 1 1-2 0V1a1 1 0 0 1 1-1ZM4.929 3.515a1 1 0 0 0-1.414 1.414l2.828 2.828a1 1 0 0 0 1.414-1.414L4.93 3.515ZM1 11a1 1 0 1 0 0 2h4a1 1 0 1 0 0-2H1ZM18 12a1 1 0 0 1 1-1h4a1 1 0 1 1 0 2h-4a1 1 0 0 1-1-1ZM17.657 16.243a1 1 0 0 0-1.414 1.414l2.828 2.828a1 1 0 1 0 1.414-1.414l-2.828-2.828ZM7.757 17.657a1 1 0 1 0-1.414-1.414L3.515 19.07a1 1 0 1 0 1.414 1.414l2.828-2.828ZM20.485 4.929a1 1 0 0 0-1.414-1.414l-2.828 2.828a1 1 0 1 0 1.414 1.414l2.828-2.828ZM13 19a1 1 0 1 0-2 0v4a1 1 0 1 0 2 0v-4ZM12 7a5 5 0 1 0 0 10 5 5 0 0 0 0-10Z" />
+                </g>
               </svg>
             ) : (
               // Moon icon (visible in light, click to go dark)

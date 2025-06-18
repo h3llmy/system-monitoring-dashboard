@@ -10,7 +10,7 @@ export interface DiskChartProps {
 
 export const DiskChart: FC<DiskChartProps> = ({ chartData }) => {
   const options = useDoughnutChartOptions({
-    plugins: { title: { display: true, text: chartData.name } },
+    plugins: { title: { display: true, text: chartData?.name } },
   });
 
   const data = useMemo(
@@ -18,7 +18,7 @@ export const DiskChart: FC<DiskChartProps> = ({ chartData }) => {
       labels: ["Free Space", "Used Space"],
       datasets: [
         {
-          data: [chartData.total - chartData.used, chartData.used],
+          data: [chartData?.total - chartData?.used, chartData?.used],
           backgroundColor: ["#a6a6a6", "#ff6384"],
           hoverBackgroundColor: ["#757575", "#ff4c73"],
         },
@@ -31,8 +31,8 @@ export const DiskChart: FC<DiskChartProps> = ({ chartData }) => {
     <div className="w-full h-full flex flex-col justify-center items-center">
       <Doughnut data={data} options={options} />
       <div className="mt-2">
-        <span>Read: {formatBps(chartData.readBps)}</span>
-        <span className="ml-4">Write: {formatBps(chartData.writeBps)}</span>
+        <span>Read: {formatBps(chartData?.readBps)}</span>
+        <span className="ml-4">Write: {formatBps(chartData?.writeBps)}</span>
       </div>
     </div>
   );

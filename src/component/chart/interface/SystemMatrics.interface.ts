@@ -1,8 +1,12 @@
 export interface SystemMetrics {
   timestamp: string;
+  disk: DiskMetrics[];
+  matrics: Matrics[];
+}
+
+export interface Matrics {
   cpu: number;
   memory: MemoryMetrics;
-  disk: DiskMetrics[];
   network: NetworkMetrics;
 }
 

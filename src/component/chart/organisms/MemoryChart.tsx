@@ -5,7 +5,7 @@ import { SystemMetrics } from "../interface";
 import { useDarkMode } from "../../../utils/hooks";
 
 export interface MemoryChartProps {
-  chartData: SystemMetrics[];
+  chartData: SystemMetrics;
 }
 
 export const MemoryChart: FC<MemoryChartProps> = ({ chartData }) => {
@@ -19,14 +19,17 @@ export const MemoryChart: FC<MemoryChartProps> = ({ chartData }) => {
     },
   });
   if (options?.scales?.y)
-    options.scales.y.suggestedMax = chartData[0]?.memory?.total ?? 1024;
+    options.scales.y.suggestedMax =
+      chartData?.matrics?.[0]?.memory?.total ?? 1024;
 
   const latestMemoryUsage =
-    chartData.length > 0 ? chartData[chartData.length - 1]?.memory?.used : 0;
+    chartData?.matrics?.length > 0
+      ? chartData?.matrics?.[chartData?.matrics?.length - 1]?.memory?.used
+      : 0;
 
   const data = useMemo(
     () => ({
-      labels: chartData.map(() => ""),
+      labels: chartData?.matrics?.map(() => ""),
       datasets: [
         {
           label: `Memory Usage ${latestMemoryUsage} MB`,
@@ -37,7 +40,7 @@ export const MemoryChart: FC<MemoryChartProps> = ({ chartData }) => {
           pointHoverRadius: 0,
           tension: 0.3,
           fill: "start",
-          data: chartData?.map((d) => d?.memory?.used),
+          data: chartData?.matrics?.map((d) => d?.memory?.used),
         },
       ],
     }),
