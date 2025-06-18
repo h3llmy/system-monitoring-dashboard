@@ -16,7 +16,8 @@ export const useMonitoringChartSse = () => {
 
       try {
         const response = await fetch(
-          "http://localhost:3000/api/v1/monitoring",
+          "/api/v1/monitoring",
+          // "http://127.0.0.1:3005/api/v1/monitoring",
           {
             method: "GET",
             headers: {

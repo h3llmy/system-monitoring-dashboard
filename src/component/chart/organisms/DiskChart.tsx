@@ -10,7 +10,7 @@ export interface DiskChartProps {
 
 export const DiskChart: FC<DiskChartProps> = ({ chartData }) => {
   const options = useDoughnutChartOptions({
-    plugins: { title: { display: true, text: chartData.mount } },
+    plugins: { title: { display: true, text: chartData.name } },
   });
 
   const data = useMemo(

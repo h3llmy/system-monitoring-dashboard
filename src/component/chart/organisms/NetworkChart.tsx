@@ -2,19 +2,24 @@ import { SystemMetrics } from "../interface";
 import { FC, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { useLineChartOptions } from "../hook";
+import { useDarkMode } from "../../../utils/hooks";
 
 export interface NetworkChartProps {
   chartData: SystemMetrics[];
 }
 
 export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
+  const { isDarkMode } = useDarkMode();
   const options = useLineChartOptions({
-    plugins: {
-      title: { display: true, text: "Network Usage" },
+    isDarkMode,
+    options: {
+      plugins: {
+        title: { text: "Network Usage" },
+      },
     },
   });
 
-  if (options.scales.y) options.scales.y.suggestedMax = 50;
+  if (options?.scales?.y) options.scales.y.suggestedMax = 50;
 
   const latestUploadSpeed =
     chartData.length > 0 ? chartData[chartData.length - 1]?.network?.up : 0;

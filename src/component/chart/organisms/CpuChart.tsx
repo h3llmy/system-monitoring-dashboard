@@ -2,18 +2,28 @@ import { FC, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { useLineChartOptions } from "../hook";
 import { SystemMetrics } from "../interface";
+import { useDarkMode } from "../../../utils/hooks";
 
 export interface CpuChartProps {
   chartData: SystemMetrics[];
 }
 
 export const CpuChart: FC<CpuChartProps> = ({ chartData }) => {
-  const options = useLineChartOptions();
+  const { isDarkMode } = useDarkMode();
+  const options = useLineChartOptions({
+    isDarkMode,
+    options: {
+      plugins: {
+        title: {
+          text: "CPU Usage",
+        },
+      },
+    },
+  });
 
-  if (options.scales.y) {
-    options.scales.y.suggestedMax = chartData[0]?.cpu ?? 1024; // CPU usage is typically between 0 and 100%
+  if (options?.scales?.y) {
+    options.scales.y.suggestedMax = 100;
   }
-
   const data = useMemo(
     () => ({
       labels: chartData.map(() => ""),
