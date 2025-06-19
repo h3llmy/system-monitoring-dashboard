@@ -22,7 +22,7 @@ export function formatMemory(
   bytes: number,
   decimals = 2
 ): { value: number; unit: string } {
-  if (!+bytes) return { value: 0, unit: "Bytes" };
+  if (!+bytes) return { value: 0, unit: "B" };
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;

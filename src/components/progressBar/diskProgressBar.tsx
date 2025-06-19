@@ -9,6 +9,9 @@ interface Props {
 export const DiskUsageBar: FC<Props> = ({ disk }) => {
   const diskUsed = formatMemory(disk.used);
   const diskTotal = formatMemory(disk.total);
+
+  const diskWrite = formatMemory(disk.writeBps);
+  const diskRead = formatMemory(disk.readBps);
   return (
     <div>
       <div className="flex justify-between text-sm dark:text-white/80 mb-1">
@@ -28,8 +31,12 @@ export const DiskUsageBar: FC<Props> = ({ disk }) => {
         />
       </div>
       <div className="flex justify-between text-xs dark:text-white/60">
-        <span>Read: {disk.readBps}/s</span>
-        <span>Write: {disk.writeBps}/s</span>
+        <span>
+          Read: {diskRead.value} {diskRead.unit}/s
+        </span>
+        <span>
+          Write: {diskWrite.value} {diskWrite.unit}/s
+        </span>
       </div>
     </div>
   );
