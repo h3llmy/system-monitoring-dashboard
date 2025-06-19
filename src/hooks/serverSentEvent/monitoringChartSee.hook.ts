@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { SystemMetrics } from "../interface";
+import { SystemMetrics } from "../../components/chart/interface";
 
 export const useMonitoringChartSse = () => {
   const [chartData, setChartData] = useState<SystemMetrics>(

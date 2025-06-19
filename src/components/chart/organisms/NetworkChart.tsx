@@ -14,7 +14,7 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
     isDarkMode,
     options: {
       plugins: {
-        title: { text: "Network Usage" },
+        title: { text: "Network I/O" },
       },
     },
   });
