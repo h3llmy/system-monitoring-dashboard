@@ -6,7 +6,7 @@ export const DashboardLayout = () => {
     <>
       <Navbar />
       <main className="min-h-screen dark:bg-gray-900">
-        <div className="pt-16 ">
+        <div className="pt-20">
           <Outlet />
         </div>
       </main>

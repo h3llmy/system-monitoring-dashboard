@@ -1,3 +1,2 @@
-export * from './hook';
-export * from './organisms';
-export * from './templates';
+export * from "./hook";
+export * from "./organisms";

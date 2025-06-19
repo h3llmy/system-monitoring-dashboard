@@ -2,7 +2,7 @@ import { FC, useMemo } from "react";
 import { Doughnut } from "react-chartjs-2";
 import { DiskMetrics } from "../interface";
 import { useDoughnutChartOptions } from "../hook";
-import { formatBps } from "../../../utils/format/formatBps";
+import { formatBps } from "../../../utils/format";
 
 export interface DiskChartProps {
   chartData: DiskMetrics;

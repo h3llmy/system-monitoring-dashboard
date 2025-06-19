@@ -19,6 +19,7 @@ export interface DiskMetrics {
   name: string;
   mount: string;
   type: string;
+  usedPercent: number;
   used: number;
   total: number;
   readBytes: number;
