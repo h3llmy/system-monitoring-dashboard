@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { DiskMetrics } from "../chart/interface";
+import { DiskMetrics } from "../../hooks/serverSentEvent/monitoringSse/interface";
 import { formatMemory } from "../../utils/format";
 
 interface Props {

@@ -1,9 +1,9 @@
 import { FC, useMemo } from "react";
 import { useLineChartOptions } from "../hook";
 import { Line } from "react-chartjs-2";
-import { SystemMetrics } from "../interface";
 import { useDarkMode } from "../../../utils/hooks";
 import { formatMemory } from "../../../utils/format";
+import { SystemMetrics } from "../../../hooks/serverSentEvent";
 
 export interface MemoryChartProps {
   chartData: SystemMetrics;

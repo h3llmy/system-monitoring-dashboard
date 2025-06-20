@@ -13,9 +13,13 @@ import {
 import { CpuChart, MemoryChart, NetworkChart } from "../../components/chart";
 import { ChartCard } from "../../components/card";
 import { DiskUsageBar } from "../../components/progressBar";
-import { useMonitoringChartSse } from "../../hooks/serverSentEvent";
 import { TemperatureSection } from "./temperature/temperatureSection";
 import { Temperature } from "./temperature/temperature";
+import {
+  useDockerChartSse,
+  useMonitoringChartSse,
+} from "../../hooks/serverSentEvent";
+import { DockerCard } from "../../components/card/organisms/dockerCard";
 
 ChartJS.register(
   ArcElement,
@@ -31,10 +35,17 @@ ChartJS.register(
 
 const Home = () => {
   const [chartData] = useMonitoringChartSse();
+  const dockerData = useDockerChartSse();
 
   return (
     <div className="p-3">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        {dockerData?.map((docker, index) => (
+          <DockerCard dockerMatrics={docker} key={index} />
+        ))}
+      </div>
+
+      <div className="pt-3 grid grid-cols-1 md:grid-cols-3 gap-3">
         <ChartCard>
           <CpuChart chartData={chartData} />
         </ChartCard>

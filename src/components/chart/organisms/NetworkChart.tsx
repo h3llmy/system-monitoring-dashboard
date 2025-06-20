@@ -1,8 +1,8 @@
-import { SystemMetrics } from "../interface";
 import { FC, useMemo } from "react";
 import { Line } from "react-chartjs-2";
 import { useLineChartOptions } from "../hook";
 import { useDarkMode } from "../../../utils/hooks";
+import { SystemMetrics } from "../../../hooks/serverSentEvent";
 
 export interface NetworkChartProps {
   chartData: SystemMetrics;

@@ -1,9 +1,9 @@
 import { useEffect, useRef, useState } from "react";
-import { SystemMetrics } from "../../components/chart/interface";
+import { DockerMatrics } from "./interface";
 
-export const useMonitoringChartSse = () => {
-  const [chartData, setChartData] = useState<SystemMetrics>(
-    {} as SystemMetrics
+export const useDockerChartSse = () => {
+  const [chartData, setChartData] = useState<DockerMatrics[]>(
+    [] as DockerMatrics[]
   );
   const retryTimeoutRef = useRef<number | null>(null);
   const controllerRef = useRef<AbortController | null>(null);
@@ -17,8 +17,10 @@ export const useMonitoringChartSse = () => {
       controllerRef.current = new AbortController();
 
       try {
+        console.log("Connected to /api/v1/docker");
+
         const response = await fetch(
-          "/api/v1/monitoring",
+          "/api/v1/docker",
           // "http://127.0.0.1:3005/api/v1/monitoring",
           {
             method: "GET",
@@ -51,7 +53,7 @@ export const useMonitoringChartSse = () => {
               if (line.startsWith("data:")) {
                 const jsonStr = line.replace(/^data:\s*/, "");
                 try {
-                  const parsed: SystemMetrics = JSON.parse(jsonStr);
+                  const parsed: DockerMatrics[] = JSON.parse(jsonStr);
                   setChartData(parsed);
                 } catch (err) {
                   console.error("Failed to parse SSE data:", err);
@@ -80,5 +82,5 @@ export const useMonitoringChartSse = () => {
     };
   }, []);
 
-  return [chartData] as const;
+  return chartData;
 };

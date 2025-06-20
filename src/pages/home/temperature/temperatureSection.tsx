@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { CoreTemperature } from "../../../components/chart/interface";
+import { CoreTemperature } from "../../../hooks/serverSentEvent";
 
 export interface TemperatureSectionProps {
   title: string;
