@@ -17,8 +17,6 @@ export const useDockerChartSse = () => {
       controllerRef.current = new AbortController();
 
       try {
-        console.log("Connected to /api/v1/docker");
-
         const response = await fetch(
           "/api/v1/docker",
           // "http://127.0.0.1:3005/api/v1/monitoring",

@@ -21,6 +21,8 @@ export interface Temperature {
 export interface CoreTemperature {
   name: number;
   temp: number;
+  sensorCritical: number;
+  sensorHigh: number;
 }
 
 export interface MemoryMetrics {

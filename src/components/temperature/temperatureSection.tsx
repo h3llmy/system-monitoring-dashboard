@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { CoreTemperature } from "../../../hooks/serverSentEvent";
+import { CoreTemperature } from "../../hooks/serverSentEvent";
 
 export interface TemperatureSectionProps {
   title: string;
@@ -12,6 +12,7 @@ export const TemperatureSection: FC<TemperatureSectionProps> = ({
   data,
   showIndex = false,
 }) => {
+  console.log(data);
   if (!data || data.length === 0) return null;
 
   return (
@@ -23,7 +24,13 @@ export const TemperatureSection: FC<TemperatureSectionProps> = ({
         {data.map((item, index) => (
           <div
             key={index}
-            className="flex justify-between text-gray-900 dark:text-gray-100 text-sm"
+            className={`flex justify-between text-sm ${
+              item.temp >= item.sensorCritical
+                ? "text-red-500 dark:text-red-500"
+                : item.temp >= item.sensorHigh
+                ? "text-yellow-500 dark:text-yellow-500"
+                : "text-gray-900 dark:text-gray-100"
+            }`}
           >
             <span>
               {item.name}
