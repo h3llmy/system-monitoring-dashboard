@@ -12,7 +12,6 @@ export const TemperatureSection: FC<TemperatureSectionProps> = ({
   data,
   showIndex = false,
 }) => {
-  console.log(data);
   if (!data || data.length === 0) return null;
 
   return (
