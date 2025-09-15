@@ -55,7 +55,7 @@ export const useDockerChartSse = () => {
                   setChartData(parsed);
                 } catch (err) {
                   console.error("Failed to parse SSE data:", err);
-                  console.debug("Raw data string:", jsonStr);
+                  // console.debug("Raw data string:", jsonStr);
                 }
               }
             }
