@@ -25,9 +25,6 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
   const formatUploadSpeed = formatMemory(latestUploadSpeed);
   const formatDownloadSpeed = formatMemory(latestDownloadSpeed);
 
-  // const uploadSpeedInt: number = parseInt(`${formatUploadSpeed.value}`);
-  // const downloadSpeedInt: number = parseInt(`${formatDownloadSpeed.value}`);
-
   const options = useLineChartOptions({
     isDarkMode,
     options: {
