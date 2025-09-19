@@ -1,37 +1,36 @@
+export type MemoryFormat = "bytes" | "bits";
+
 /**
- * Formats a given memory value (in bytes) into a human-readable string
- * using appropriate units (B, KB, MB, GB, etc.).
+ * Format a value into human-readable units (memory or bandwidth).
  *
- * @param value - The number of bytes to format.
- * @returns A string representation of the bytes value in a more readable format.
+ * @param value - The raw value to format (in bytes or bits).
+ * @param type - "bytes" (default) for memory sizes or "bits" for bandwidth.
+ * @param decimals - How many decimal places to keep.
+ * @returns An object with { value, unit }
  */
-// export function formatMemory(value: number): { value: number; unit: string } {
-//   const units = ["B", "kB", "MB", "GB", "TB", "PB", "EB"];
-//   let unitIndex = 0;
-//   let v = value;
-
-//   while (v >= 1024 && unitIndex < units.length - 1) {
-//     v /= 1024;
-//     unitIndex++;
-//   }
-
-//   return { value: Math.round(v * 100) / 100, unit: units[unitIndex] };
-// }
-
 export function formatMemory(
-  bytes: number,
+  value: number,
+  type: MemoryFormat = "bytes",
   decimals = 2
 ): { value: number; unit: string } {
-  if (!+bytes) return { value: 0, unit: "B" };
+  if (!+value) {
+    return { value: 0, unit: type === "bytes" ? "B" : "bps" };
+  }
 
-  const k = 1024;
+  const k = 1024; // base 1024 for storage
+  const k10 = 1000; // base 1000 for bandwidth (common convention)
   const dm = decimals < 0 ? 0 : decimals;
-  const sizes = ["B", "kB", "MB", "GB", "TB", "PB", "EB"];
 
-  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  const units =
+    type === "bytes"
+      ? ["B", "kB", "MB", "GB", "TB", "PB", "EB"]
+      : ["bps", "Kbps", "Mbps", "Gbps", "Tbps", "Pbps", "Ebps"];
+
+  const base = type === "bytes" ? k : k10;
+  const i = Math.floor(Math.log(value) / Math.log(base));
 
   return {
-    value: parseFloat((bytes / Math.pow(k, i)).toFixed(dm)),
-    unit: sizes[i],
+    value: parseFloat((value / Math.pow(base, i)).toFixed(dm)),
+    unit: units[i],
   };
 }

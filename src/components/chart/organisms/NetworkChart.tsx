@@ -1,5 +1,6 @@
-import { FC, useMemo } from "react";
+import { FC, useMemo, useRef, useEffect } from "react";
 import { Line } from "react-chartjs-2";
+import { Chart as ChartJS } from "chart.js";
 import { useLineChartOptions } from "../hook";
 import { useDarkMode } from "../../../utils/hooks";
 import { SystemMetrics } from "../../../hooks/serverSentEvent";
@@ -11,19 +12,20 @@ export interface NetworkChartProps {
 
 export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
   const { isDarkMode } = useDarkMode();
+  const chartRef = useRef<ChartJS<"line">>(null);
 
   const latestUploadSpeed =
     chartData?.matrics?.length > 0
-      ? chartData?.matrics?.[chartData?.matrics?.length - 1]?.network?.up
+      ? chartData.matrics[chartData.matrics.length - 1]?.network?.up ?? 0
       : 0;
 
   const latestDownloadSpeed =
     chartData?.matrics?.length > 0
-      ? chartData?.matrics?.[chartData.matrics.length - 1]?.network?.down
+      ? chartData.matrics[chartData.matrics.length - 1]?.network?.down ?? 0
       : 0;
 
-  const formatUploadSpeed = formatMemory(latestUploadSpeed);
-  const formatDownloadSpeed = formatMemory(latestDownloadSpeed);
+  const displayUpload = formatMemory(latestUploadSpeed, "bits");
+  const displayDownload = formatMemory(latestDownloadSpeed, "bits");
 
   const options = useLineChartOptions({
     isDarkMode,
@@ -33,26 +35,24 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
       },
       scales: {
         y: {
-          suggestedMax: Math.max(
-            formatUploadSpeed.value,
-            formatDownloadSpeed.value
-          ),
           ticks: {
-            callback: (val) => `${val} ${formatUploadSpeed.unit}`,
+            callback: (val) => {
+              const formatted = formatMemory(Number(val), "bits");
+              return `${formatted.value} ${formatted.unit}`;
+            },
           },
         },
       },
     },
   });
 
-  if (options?.scales?.y) options.scales.y.suggestedMax = 50;
-
-  const data = useMemo(
+  // Initialize datasets only once
+  const initialData = useMemo(
     () => ({
       labels: chartData.matrics?.map(() => ""),
       datasets: [
         {
-          label: `Upload (${formatUploadSpeed.value} ${formatUploadSpeed.unit})`,
+          label: `Upload (${displayUpload.value} ${displayUpload.unit})`,
           backgroundColor: "rgba(0, 123, 255, 0.2)",
           borderColor: "rgba(0, 123, 255, 1)",
           borderWidth: 2,
@@ -60,13 +60,10 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
           pointHoverRadius: 5,
           tension: 0.4,
           fill: true,
-          data: chartData?.matrics?.map((d) => {
-            const formated = formatMemory(d?.network?.up);
-            return formated.value;
-          }),
+          data: chartData?.matrics?.map((d) => d?.network?.up ?? 0),
         },
         {
-          label: `Download (${formatDownloadSpeed.value} ${formatDownloadSpeed.unit})`,
+          label: `Download (${displayDownload.value} ${displayDownload.unit})`,
           backgroundColor: "rgba(220, 38, 38, 0.2)",
           borderColor: "rgba(220, 38, 38, 1)",
           borderWidth: 2,
@@ -74,15 +71,31 @@ export const NetworkChart: FC<NetworkChartProps> = ({ chartData }) => {
           pointHoverRadius: 5,
           tension: 0.4,
           fill: true,
-          data: chartData?.matrics?.map((d) => {
-            const formated = formatMemory(d?.network?.down);
-            return formated.value;
-          }),
+          data: chartData?.matrics?.map((d) => d?.network?.down ?? 0),
         },
       ],
     }),
-    [chartData, latestUploadSpeed, latestDownloadSpeed]
+    []
   );
 
-  return <Line options={options as any} data={data} />;
+  useEffect(() => {
+    const chart = chartRef.current;
+    if (!chart) return;
+
+    chart.data.labels = chartData.matrics?.map(() => "") ?? [];
+
+    chart.data.datasets[0].data = chartData.matrics?.map(
+      (d) => d?.network?.up ?? 0
+    );
+    chart.data.datasets[0].label = `Upload (${displayUpload.value} ${displayUpload.unit})`;
+
+    chart.data.datasets[1].data = chartData.matrics?.map(
+      (d) => d?.network?.down ?? 0
+    );
+    chart.data.datasets[1].label = `Download (${displayDownload.value} ${displayDownload.unit})`;
+
+    chart.update("none"); // update without animation to keep smooth
+  }, [chartData, displayUpload, displayDownload]);
+
+  return <Line ref={chartRef} options={options as any} data={initialData} />;
 };
